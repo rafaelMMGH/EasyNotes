@@ -1,25 +1,14 @@
 const express = require('express');
 
+//config DB
+const dbConfig = require('./config/database.config')
+
+const port = 8080;
+const host = "localhost";
+
 const app = express();
 
 app.use(express.json());
-
-//config DB
-const dbConfig = require('./config/database.config')
-const mongoose = require('mongoose')
-
-mongoose.Promise = global.Promise;
-
-//Connecting to the DB
-mongoose.connect(dbConfig.url, {
-    useNewUrlParser: true
-}).then(() => {
-    console.log("Successfully connected to the database")
-}).catch( err => {
-    console.log('Could not connect to the database. Exiting now...', err);
-    process.exit();
-})
-
 
 app.get('/', (req, res) => {
     res.json({'msg': 'Hello World'});
@@ -28,6 +17,6 @@ app.get('/', (req, res) => {
 // Require Notes routes
 require('./app/routes/note.routes')(app)
 
-app.listen(8080, () =>{
-    console.log("Server is running");
-})
+app.listen(port, () =>{
+    console.log(`Server is running at: http://${host}:${port} `);
+});
